@@ -165,8 +165,18 @@ var Zepto = (function() {
       return $(slice.apply(this, arguments));
     },
     ready: function(callback){
-      if (readyRE.test(document.readyState)) callback($);
-      else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false);
+      if (readyRE.test(document.readyState)) {
+        callback($);
+      } else {
+        var called = false;
+        var readyCallback = function() {
+          if (called) return;
+          called = true;
+          callback($);
+        };
+        document.addEventListener('DOMContentLoaded', readyCallback, false);
+        window.addEventListener('load', readyCallback, false);
+      }
       return this;
     },
     get: function(idx){ return idx === undefined ? this : this[idx] },
