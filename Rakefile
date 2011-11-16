@@ -50,9 +50,9 @@ end
 
 desc "Strip trailing whitespace and ensure each file ends with a newline"
 task :whitespace do
-  Dir["*", "src/**/*", "test/**/*", "examples/**/*"].each do |filename|
-    normalize_whitespace(filename) if File.file?(filename)
-  end
+  # Dir["*", "src/**/*", "test/**/*", "examples/**/*"].each do |filename|
+  #   normalize_whitespace(filename) if File.file?(filename)
+  # end
 end
 
 desc "Concatenate source files to build zepto.js"
