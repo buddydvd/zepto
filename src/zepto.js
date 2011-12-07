@@ -115,9 +115,6 @@ var Zepto = (function() {
   zepto.init = function(selector, context) {
     // If nothing given, return an empty Zepto collection
     if (!selector) return zepto.Z()
-    // If there's a context, create a collection on that context first, and select
-    // nodes from there
-    if (context !== undefined) return $(context).find(selector)
     // If a function is given, call it when the DOM is ready
     else if (isFunction(selector)) return $(document).ready(selector)
     // If a Zepto collection is given, juts return it
@@ -139,6 +136,9 @@ var Zepto = (function() {
         dom = zepto.fragment(selector.trim(), RegExp.$1), selector = null
       // If it's a text node, just wrap it
       else if (selector.nodeType && selector.nodeType == 3) dom = [selector]
+      // If there's a context, create a collection on that context first, and select
+      // nodes from there
+      else if (context !== undefined) return $(context).find(selector)
       // And last but no least, if it's a CSS selector, use it to select nodes.
       else dom = $$(document, selector)
       // create a new Zepto collection from the nodes found
@@ -420,8 +420,7 @@ var Zepto = (function() {
       return this.each(function(){ this.removeAttribute(name) })
     },
     data: function(name, value){
-      var data = this.attr('data-' + name, value);
-      return data !== null ? data : undefined;
+      return this.attr('data-' + name, value)
     },
     val: function(value){
       return (value === undefined) ?
@@ -441,27 +440,26 @@ var Zepto = (function() {
       }
     },
     css: function(property, value){
-      if (value === undefined && typeof property == 'string') {
+      if (value === undefined && typeof property == 'string')
         return (
           this.length == 0
             ? undefined
-            : this[0].style[camelize(property)] || getComputedStyle(this[0], '').getPropertyValue(property)
-        )
-      }
-      var css = '';
-      for (key in property) {
+            : this[0].style[camelize(property)] || getComputedStyle(this[0], '').getPropertyValue(property))
+
+      var css = ''
+      for (key in property)
         if(typeof property[key] == 'string' && property[key] == '')
-          this.each(function() {this.style.removeProperty(dasherize(key))});
+          this.each(function(){ this.style.removeProperty(dasherize(key)) })
         else
-          css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';';
-      }
-      if (typeof property == 'string') {
+          css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';'
+
+      if (typeof property == 'string')
         if (value == '')
-          this.each(function() {this.style.removeProperty(dasherize(property))});
+          this.each(function(){ this.style.removeProperty(dasherize(property)) })
         else
-          css = dasherize(property) + ":" + maybeAddPx(property, value);
-      }
-      return this.each(function() { this.style.cssText += ';' + css });
+          css = dasherize(property) + ":" + maybeAddPx(property, value)
+
+      return this.each(function(){ this.style.cssText += ';' + css })
     },
     index: function(element){
       return element ? this.indexOf($(element)[0]) : this.parent().children().indexOf(this[0])
