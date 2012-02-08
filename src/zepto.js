@@ -183,7 +183,7 @@ var Zepto = (function() {
       }
       return this;
     },
-    get: function(idx){ return idx === undefined ? this : this[idx] },
+    get: function(idx){ return idx === undefined ? slice.call(this) : this[idx] },
     size: function(){ return this.length },
     remove: function () {
       return this.each(function () {
