@@ -60,7 +60,11 @@
       }
     }
 
-    wrappedCallback = function(){
+    wrappedCallback = function(event){
+      if (event.target !== event.currentTarget) {
+        return;
+      }
+      $(event.target).unbind(endEvent, arguments.callee);
       var props = {};
       props[prefix + 'transition-property'] = 'none';
       props[prefix + 'transition-duration'] = '0s';
@@ -69,7 +73,7 @@
       $(this).css(props);
       callback && callback.call(this);
     }
-    if (duration > 0) this.one(endEvent, wrappedCallback);
+    if (duration > 0) this.bind(endEvent, wrappedCallback);
 
     setTimeout(function() {
       that.css(cssProperties);
