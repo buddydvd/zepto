@@ -61,10 +61,10 @@
     }
 
     wrappedCallback = function(event){
-      if (event.target !== event.currentTarget) {
-        return;
+      if (typeof event !== 'undefined') {
+        if (event.target !== event.currentTarget) return; // makes sure the event didn't bubble from "below"
+        $(event.target).unbind(endEvent, arguments.callee);
       }
-      $(event.target).unbind(endEvent, arguments.callee);
       var props = {};
       props[prefix + 'transition-property'] = 'none';
       props[prefix + 'transition-duration'] = '0s';
