@@ -14,9 +14,11 @@
     return xDelta >= yDelta ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
   }
 
-  var longTapDelay = 750
+  var longTapDelay = 750, longTapTimeout
+
   function longTap(){
-    if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
+    longTapTimeout = null
+    if (touch.last) {
       touch.el.trigger('longTap')
       touch = {}
     }
@@ -31,11 +33,15 @@
       touch.y1 = e.touches[0].pageY
       if (delta > 0 && delta <= 250) touch.isDoubleTap = true
       touch.last = now
-      setTimeout(longTap, longTapDelay)
+      longTapTimeout = setTimeout(longTap, longTapDelay)
     }).bind('touchmove', function(e){
+      if (longTapTimeout) clearTimeout(longTapTimeout)
+      longTapTimeout = null
       touch.x2 = e.touches[0].pageX
       touch.y2 = e.touches[0].pageY
     }).bind('touchend', function(e){
+      if (longTapTimeout) clearTimeout(longTapTimeout)
+      longTapTimeout = null
       if (touch.isDoubleTap) {
         touch.el.trigger('doubleTap')
         touch = {}
