@@ -400,6 +400,9 @@ var Zepto = (function() {
       })
       return this
     },
+    clone: function(){
+      return $(this.map(function(){ return this.cloneNode(true) }))
+    },
     hide: function(){
       return this.css("display", "none")
     },
