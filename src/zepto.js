@@ -359,6 +359,9 @@ var Zepto = (function() {
     children: function(selector){
       return filtered(this.map(function(){ return slice.call(this.children) }), selector)
     },
+    contents: function() {
+      return $(this.map(function() { return slice.call(this.childNodes) }))
+    },
     siblings: function(selector){
       return filtered(this.map(function(i, el){
         return slice.call(el.parentNode.children).filter(function(child){ return child!==el })
@@ -392,6 +395,12 @@ var Zepto = (function() {
         newContent.append(this)
       }
       return this
+    },
+    wrapInner: function(newContent){
+      return this.each(function(){
+        var self = $(this), contents = self.contents()
+        contents.length ? contents.wrapAll(newContent) : self.append(newContent)
+      })
     },
     unwrap: function(){
       this.parent().each(function(){
