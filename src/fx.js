@@ -42,6 +42,7 @@
       // keyframe animation
       cssProperties[prefix + 'animation-name'] = properties
       cssProperties[prefix + 'animation-duration'] = duration + 's'
+      cssProperties[prefix + 'animation-timing-function'] = (ease || 'linear')
       endEvent = $.fx.animationEnd
     } else {
       // CSS transitions
