@@ -289,7 +289,7 @@ var Zepto = (function() {
     // `map` and `slice` in the jQuery API work differently
     // from their array counterparts
     map: function(fn){
-      return $.map(this, function(el, i){ return fn.call(el, i, el) })
+      return $($.map(this, function(el, i){ return fn.call(el, i, el) }))
     },
     slice: function(){
       return $(slice.apply(this, arguments))
@@ -365,9 +365,9 @@ var Zepto = (function() {
     },
     find: function(selector){
       var result
-      if (this.length == 1) result = zepto.qsa(this[0], selector)
+      if (this.length == 1) result = $(zepto.qsa(this[0], selector))
       else result = this.map(function(){ return zepto.qsa(this, selector) })
-      return $(result)
+      return result
     },
     closest: function(selector, context){
       var node = this[0]
@@ -393,7 +393,7 @@ var Zepto = (function() {
       return filtered(this.map(function(){ return children(this) }), selector)
     },
     contents: function() {
-      return $(this.map(function() { return slice.call(this.childNodes) }))
+      return this.map(function() { return slice.call(this.childNodes) })
     },
     siblings: function(selector){
       return filtered(this.map(function(i, el){
@@ -405,7 +405,7 @@ var Zepto = (function() {
     },
     // `pluck` is borrowed from Prototype.js
     pluck: function(property){
-      return this.map(function(){ return this[property] })
+      return $.map(this, function(el){ return el[property] })
     },
     show: function(){
       return this.each(function(){
@@ -455,7 +455,7 @@ var Zepto = (function() {
       return this
     },
     clone: function(){
-      return $(this.map(function(){ return this.cloneNode(true) }))
+      return this.map(function(){ return this.cloneNode(true) })
     },
     hide: function(){
       return this.css("display", "none")
